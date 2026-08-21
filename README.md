@@ -1,8 +1,8 @@
-# nodejs-falsework
+# 知问
 
 [English](./README.en.md) | 简体中文
 
-一个开箱即用的 Node.js + TypeScript 脚手架，集成了开发、构建、代码检查与 Git 钩子，帮助你快速启动后端项目。
+面向 Markdown 知识库的 RAG 助手：加载文档、语义分块、向量检索，再生成答案。
 
 ## 特性
 
@@ -25,8 +25,8 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/XiaoMing0000/nodejs-falsework.git
-cd nodejs-falsework
+git clone https://github.com/XiaoMing0000/kbs-rag.git
+cd kbs-rag
 
 # 安装依赖
 pnpm install
@@ -51,7 +51,7 @@ pnpm dev
 ## 项目结构
 
 ```
-nodejs-falsework/
+kbs-rag/
 ├── config/
 │   └── esbuild.config.mts   # esbuild 构建配置（ESM）
 ├── src/

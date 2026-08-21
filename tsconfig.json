@@ -16,7 +16,7 @@
 		"sourceMap": true,
 		"moduleDetection": "force"
 	},
-	"include": ["src/**/*", "config/**/*", "*.config.ts"],
+	"include": ["examples/**/*", "src/**/*", "config/**/*", "*.config.ts"],
 	"exclude": ["node_modules", "dist"],
 	"ts-node": {
 		"transpileOnly": true,

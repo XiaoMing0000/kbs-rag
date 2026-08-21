@@ -1,8 +1,8 @@
-# nodejs-falsework
+# Zhiwen
 
 English | [简体中文](./README.md)
 
-An out-of-the-box Node.js + TypeScript scaffold with development, build, linting, and Git hooks preconfigured—so you can start a backend project quickly.
+A RAG assistant for Markdown knowledge bases: load documents, chunk semantically, retrieve, then generate answers.
 
 ## Features
 
@@ -25,8 +25,8 @@ An out-of-the-box Node.js + TypeScript scaffold with development, build, linting
 
 ```bash
 # Clone the repository
-git clone https://github.com/XiaoMing0000/nodejs-falsework.git
-cd nodejs-falsework
+git clone https://github.com/XiaoMing0000/kbs-rag.git
+cd kbs-rag
 
 # Install dependencies
 pnpm install
@@ -51,7 +51,7 @@ pnpm dev
 ## Project Structure
 
 ```
-nodejs-falsework/
+kbs-rag/
 ├── config/
 │   └── esbuild.config.mts   # esbuild build config (ESM)
 ├── src/
