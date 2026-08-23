@@ -1,6 +1,8 @@
 import { defineConfig } from 'oxfmt';
 import type { OxfmtConfig } from 'oxfmt';
 
+// 文档: https://oxc.rs/docs/guide/usage/formatter.html
+
 export default defineConfig({
 	printWidth: 150, // 每行最大字符数
 	useTabs: true, // 是否使用制表符

@@ -1,6 +1,8 @@
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
 
+// 文档: https://oxc.rs/docs/guide/usage/linter.html
+
 export default defineConfig({
 	plugins: ['eslint', 'typescript'],
 	ignorePatterns: ['dist', 'node_modules'],
@@ -12,7 +14,7 @@ export default defineConfig({
 		'typescript/no-explicit-any': 'off', // 关闭类型为 any 报错
 		'no-unused-expressions': 'off', // 关闭未使用表达式报错
 		'no-unused-vars': [
-			'warn', // 将变量未引用设置为 warn
+			'error', // 将变量未引用设置为 warn
 			{
 				argsIgnorePattern: '^_',
 				varsIgnorePattern: '^_',

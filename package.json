@@ -11,11 +11,13 @@
 		"dev:unwatch": "tsx src/index.ts",
 		"build": "node ./config/esbuild.config.mts",
 		"start": "node ./dist/index.js",
+		"tsc": "tsc",
+		"tsc:check": "tsc --noEmit",
 		"fmt": "oxfmt",
 		"fmt:check": "oxfmt --check",
 		"lint": "oxlint",
 		"lint:fix": "oxlint --fix",
-		"lint:check": "oxlint && tsc --noEmit",
+		"lint:check": "oxlint && pnpm run tsc:check",
 		"prepare": "simple-git-hooks"
 	},
 	"dependencies": {

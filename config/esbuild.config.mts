@@ -1,6 +1,9 @@
+import { rm } from 'fs/promises';
 import * as esbuild from 'esbuild';
 
-await esbuild.build({
+rm('./dist', { recursive: true, force: true });
+
+esbuild.build({
 	entryPoints: { index: 'src/index.ts' },
 	outdir: './dist/',
 	entryNames: '[name]',
