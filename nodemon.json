@@ -1,4 +1,0 @@
-{
-	"verbose": true,
-	"ignore": ["./doc", "./dist", "./logs", "./node_modules"]
-}

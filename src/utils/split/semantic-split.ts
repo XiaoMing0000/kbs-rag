@@ -120,9 +120,7 @@ export async function semanticChunking(
 	const windows = combineWithBuffer(sentences, bufferSize);
 
 	// 3. 批量嵌入
-	console.time('embed:');
 	const embeddings = await embeddingsModel.embedDocuments(windows);
-	console.timeEnd('embed:');
 
 	// 4. 相邻余弦距离
 	const distances: number[] = [];

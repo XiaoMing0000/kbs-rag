@@ -7,7 +7,7 @@
 	"scripts": {
 		"db:init": "prisma migrate dev",
 		"db:generate": "prisma generate",
-		"dev": "nodemon src/entry/index.ts",
+		"dev": "nodemon",
 		"dev:unwatch": "tsx src/entry/index.ts",
 		"build": "node ./config/esbuild.config.mts",
 		"start": "node ./dist/index.js",
@@ -41,7 +41,7 @@
 		"zod": "^4.4.3"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "npm run lint && npm run format",
+		"pre-commit": "npm run lint && npm run format -- --check",
 		"pre-push": "npm run format"
 	},
 	"engines": {
@@ -50,7 +50,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/XiaoMing0000/nodejs-falsework.git"
+		"url": "git+https://github.com/XiaoMing0000/kbs-rag.git"
 	},
 	"keywords": [
 		"rag",
@@ -59,9 +59,23 @@
 		"knowledge-assistant"
 	],
 	"bugs": {
-		"url": "https://github.com/XiaoMing0000/nodejs-falsework/issues"
+		"url": "https://github.com/XiaoMing0000/kbs-rag/issues"
 	},
-	"homepage": "https://github.com/XiaoMing0000/nodejs-falseworkCode#readme",
+	"homepage": "https://github.com/XiaoMing0000/kbs-ragCode#readme",
 	"author": "xiaoming0000",
-	"license": "MIT"
+	"license": "MIT",
+	"nodemonConfig": {
+		"watch": [
+			"src"
+		],
+		"ext": "ts",
+		"exec": "tsx src/entry/index.ts",
+		"ignore": [
+			"./doc",
+			"./dist",
+			"./logs",
+			"./node_modules"
+		],
+		"verbose": true
+	}
 }

@@ -1,13 +1,6 @@
-import { SplitType, agenticSplit } from '../split/agentic-split';
 import { Model } from '../utils/models';
+import documentService from '../service/document.service';
 
-const agenticSplitModel = Model.deepseek({
-	modelKwargs: {
-		thinking: { type: 'disabled' },
-	},
-});
-
-// const files = loadMd(path.join(__dirname, '../', 'source-md'));
 const content = `# RAG
 测试标签内的 content.
 ## 什么是 RAG
@@ -117,30 +110,10 @@ RAG 的基本流程：
 
 **运维闭环：**增量更新 -> 效果监控 -> 策略调整 -> 再监控
 `;
-// const segments = ChunkingStrategy.fixedSize(content, { chunkSize: 30, overlap: 10 });
-
-// 使用分层结构拆分
-// const segments = ChunkingStrategy.hierarchical('', content, { chunkSize: 100, separators: ['#', '##'] });
-// console.log(JSON.stringify(segments, null, 4));
-
-// 使用递归字符串拆分
-// const segments = ChunkingStrategy.recursive(content, { chunkSize: 100, separators: ['\n\n', '\n', ' '], overlap: 0 });
-
-// 使用递归字符串拆分 markdown 语义
-// const segments = ChunkingStrategy.recursive(content, { chunkSize: 100, separators: ['\n# ', '\n## ', '\n### '], overlap: 0 });
-// console.log(segments);
 
 // 使用 embedding 模型进行余弦相似度计算进行分块
-// const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
-// (async () => {
-// 	const chunks = await semanticChunking(content, embeddingsModel, { chunkSize: 200, overlap: 0 });
-// 	chunks.forEach((chunk, i) => {
-// 		console.log(`\n===== chunk ${i + 1} / ${chunks.length}  (${chunk.length} chars) =====\n${chunk}`);
-// 	});
-// })();
-
-// 使用 agent 进行分块
+const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
 (async () => {
-	const segments = await agenticSplit(content, agenticSplitModel, { chunkSize: 100, clean: true, splitType: SplitType.SEMANTIC });
-	console.log(segments);
+	const createDocument = await documentService.upsertDocument(embeddingsModel, content);
+	console.log(createDocument);
 })();

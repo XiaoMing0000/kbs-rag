@@ -1,5 +1,5 @@
-import { semanticChunking } from '../src/split/semantic-split';
-import { ChunkingStrategy } from '../src/split/text-split';
+import { semanticChunking } from '../src/utils/split/semantic-split';
+import { ChunkingStrategy } from '../src/utils/split/text-split';
 import { Model } from '../src/utils/models';
 
 const content = `# RAG

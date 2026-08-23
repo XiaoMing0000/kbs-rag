@@ -1,0 +1,66 @@
+/**
+ * schema 文档: https://prisma.org.cn/docs/orm/reference/prisma-schema-reference
+ * 索引文档：https://www.prisma.io/docs/orm/v6/prisma-schema/data-model/indexes
+ */
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// 知识库原始文档
+model Document {
+  /// 文档主键
+  id          Int             @id @default(autoincrement())
+  /// 用户 ID
+  userId      String          @map("user_id")
+  /// 文档标题
+  title       String
+  /// 文档描述
+  description String?
+  /// 文件类型，如 markdown、pdf
+  fileType    String          @map("file_type")
+  /// 原始文件名
+  fileName    String          @map("file_name")
+  /// 文件大小（字节）
+  fileSize    Int             @map("file_size")
+  /// 文档来源，如 file、url
+  source      String
+  /// 来源格式，如 md、pdf
+  sourceType  String          @map("source_type")
+  /// 创建时间
+  createdAt   DateTime        @default(now()) @map("created_at")
+  /// 更新时间
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  /// 文档分块列表
+  chunks      DocumentChunk[]
+
+  @@unique([userId, title])
+  @@index([userId, updatedAt(sort: Desc)])
+}
+
+/// 文档分块，用于向量检索
+model DocumentChunk {
+  /// 分块主键
+  id         Int                    @id @default(autoincrement())
+  /// 分块文本内容
+  content    String
+  /// 分块向量，halfvec(2560)，用于相似度检索
+  embedding  Unsupported("halfvec")
+  /// 创建时间
+  createdAt  DateTime               @default(now()) @map("created_at")
+  /// 所属文档 ID
+  documentId Int                    @map("document_id")
+  /// 所属文档
+  document   Document               @relation(fields: [documentId], references: [id])
+
+  // Prisma ORM 目前尚不支持使用函数（例如 to_tsvector ）来确定索引值的索引。以这种方式定义的索引将无法通过 prisma db pull 查看。
+  // CREATE INDEX documentchunk_embedding_idx ON public."DocumentChunk" USING hnsw (embedding halfvec_l2_ops);
+  // @@index([embedding(ops: raw("halfvec_l2_ops"))], map: "documentchunk_embedding_idx")
+
+  @@index([documentId])
+}
