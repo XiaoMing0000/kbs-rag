@@ -2,8 +2,15 @@
 	"name": "kbs-rag",
 	"version": "1.0.0",
 	"description": "知识库构建 RAG 助手",
+	"type": "module",
 	"main": "index.js",
+	"license": "MIT",
+	"author": "xiaoming0000",
 	"packageManager": "pnpm@9.15.0",
+	"engines": {
+		"node": ">=22.13.0",
+		"pnpm": ">=9.15.0"
+	},
 	"scripts": {
 		"db:init": "prisma migrate dev",
 		"db:generate": "prisma generate",
@@ -11,24 +18,14 @@
 		"dev:unwatch": "tsx src/entry/index.ts",
 		"build": "node ./config/esbuild.config.mts",
 		"start": "node ./dist/index.js",
-		"lint": "eslint && tsc --noEmit",
-		"format": "prettier --write .",
+		"tsc": "tsc",
+		"tsc:check": "tsc --noEmit",
+		"fmt": "oxfmt",
+		"fmt:check": "oxfmt --check",
+		"lint": "oxlint",
+		"lint:fix": "oxlint --fix",
+		"lint:check": "oxlint && pnpm run tsc:check",
 		"prepare": "simple-git-hooks"
-	},
-	"devDependencies": {
-		"@types/node": "^25.9.3",
-		"@types/pg": "^8.23.1",
-		"esbuild": "^0.28.1",
-		"eslint": "^10.5.0",
-		"jiti": "^2.7.0",
-		"nodemon": "^3.1.14",
-		"prettier": "^3.8.4",
-		"prisma": "^7.9.1",
-		"simple-git-hooks": "^2.13.1",
-		"ts-node": "^10.9.2",
-		"tsx": "^4.22.4",
-		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.61.1"
 	},
 	"dependencies": {
 		"@langchain/core": "^1.2.8",
@@ -40,17 +37,29 @@
 		"pg": "^8.23.0",
 		"zod": "^4.4.3"
 	},
+	"devDependencies": {
+		"@types/node": "^25.9.3",
+		"@types/pg": "^8.23.1",
+		"esbuild": "^0.28.1",
+		"jiti": "^2.7.0",
+		"nodemon": "^3.1.14",
+		"oxfmt": "^0.64.0",
+		"oxlint": "^1.79.0",
+		"prisma": "^7.9.1",
+		"simple-git-hooks": "^2.13.1",
+		"ts-node": "^10.9.2",
+		"tsx": "^4.22.4",
+		"typescript": "^6.0.3"
+	},
 	"simple-git-hooks": {
-		"pre-commit": "npm run lint && npm run format -- --check",
-		"pre-push": "npm run format"
+		"pre-commit": "pnpm exec lint-staged",
+		"pre-push": "pnpm run fmt:check && pnpm run lint:check"
 	},
-	"engines": {
-		"node": ">=22.13.0",
-		"pnpm": ">=9.15.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/XiaoMing0000/kbs-rag.git"
+	"lint-staged": {
+		"*.{js,ts,jsx,tsx,json,jsonc}": [
+			"oxfmt",
+			"pnpm run lint:fix"
+		]
 	},
 	"keywords": [
 		"rag",
@@ -58,24 +67,12 @@
 		"markdown",
 		"knowledge-assistant"
 	],
-	"bugs": {
-		"url": "https://github.com/XiaoMing0000/kbs-rag/issues"
-	},
 	"homepage": "https://github.com/XiaoMing0000/kbs-ragCode#readme",
-	"author": "xiaoming0000",
-	"license": "MIT",
-	"nodemonConfig": {
-		"watch": [
-			"src"
-		],
-		"ext": "ts",
-		"exec": "tsx src/entry/index.ts",
-		"ignore": [
-			"./doc",
-			"./dist",
-			"./logs",
-			"./node_modules"
-		],
-		"verbose": true
+	"bugs": {
+		"url": "https://github.com/XiaoMing0000/nodejs-falsework/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/XiaoMing0000/nodejs-falsework.git"
 	}
 }

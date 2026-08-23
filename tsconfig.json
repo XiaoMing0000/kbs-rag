@@ -1,23 +1,29 @@
+// https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
 {
 	"compilerOptions": {
-		"target": "ES2022",
-		"lib": ["ES2022"],
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"lib": ["esnext"],
 		"types": ["node"],
-		"module": "Node16",
-		"moduleResolution": "Node16",
 		"rootDir": "./",
 		"outDir": "./dist",
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
+		"forceConsistentCasingInFileNames": true, // 强制一致的文件名大小写
 		"declaration": true,
+		"declarationMap": true,
+		"declarationDir": "./types",
 		"sourceMap": true,
-		"moduleDetection": "force"
+		"moduleDetection": "force",
+
+		"allowUnreachableCode": false // 允许无法访问的代码
+		// "allowUnusedLabels": false // 允许未使用的标签, oxlint 已经配置
+		// "noUnusedLocals": true // 不允许未使用的局部变量, oxlint 已经配置
 	},
 	"include": ["examples/**/*", "src/**/*", "config/**/*", "*.config.ts"],
-	"exclude": ["node_modules", "dist"],
+	"exclude": ["node_modules", "dist", "./types"],
 	"ts-node": {
 		"transpileOnly": true,
 		"files": true

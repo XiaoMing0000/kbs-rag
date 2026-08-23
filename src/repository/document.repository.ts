@@ -2,9 +2,7 @@ import { Document, DocumentChunk, Prisma, PrismaClient } from '../generated/pris
 import { prisma } from '../prisma/client';
 
 export class DocumentRepository {
-	constructor(private readonly prisma: PrismaClient) {
-		this.prisma = prisma;
-	}
+	constructor(private readonly prisma: PrismaClient) {}
 
 	/**
 	 *
