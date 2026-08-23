@@ -1,4 +1,3 @@
 {
-	"editor.defaultFormatter": "oxc.oxc-vscode",
-	"editor.formatOnSave": true
+	"recommendations": ["oxc.oxc-vscode"]
 }

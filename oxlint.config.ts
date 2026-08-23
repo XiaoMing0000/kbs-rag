@@ -4,6 +4,9 @@ import type { OxlintConfig } from 'oxlint';
 // 文档: https://oxc.rs/docs/guide/usage/linter.html
 
 export default defineConfig({
+	options: {
+		typeAware: true,
+	},
 	plugins: ['eslint', 'typescript'],
 	ignorePatterns: ['dist', 'node_modules'],
 	categories: {
