@@ -8,7 +8,7 @@ export default defineConfig({
 		typeAware: true,
 	},
 	plugins: ['eslint', 'typescript'],
-	ignorePatterns: ['dist', 'node_modules'],
+	ignorePatterns: ['dist', 'node_modules', 'src/generated/**'],
 	categories: {
 		correctness: 'warn',
 	},

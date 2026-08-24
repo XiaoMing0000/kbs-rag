@@ -1,6 +1,8 @@
 /**
+ * Prisma Client: https://www.prisma.io/docs/orm/prisma-client
  * schema 文档: https://prisma.org.cn/docs/orm/reference/prisma-schema-reference
  * 索引文档：https://www.prisma.io/docs/orm/v6/prisma-schema/data-model/indexes
+ * 本地可视化工具：npx prisma studio --config ./prisma.config.ts
  */
 
 generator client {
@@ -22,16 +24,17 @@ model Document {
   title       String
   /// 文档描述
   description String?
-  /// 文件类型，如 markdown、pdf
-  fileType    String          @map("file_type")
-  /// 原始文件名
-  fileName    String          @map("file_name")
-  /// 文件大小（字节）
-  fileSize    Int             @map("file_size")
-  /// 文档来源，如 file、url
-  source      String
-  /// 来源格式，如 md、pdf
-  sourceType  String          @map("source_type")
+  
+  /// 文档分块信息
+  chunkInfo Json? @map("chunk_info")
+  // 包含 {chunkType, size, separators, embeddingModel}
+
+  /// 文件信息，如文件名、文件大小、文件类型、文件路径等
+  fileInfo Json? @map("file_info")
+  // 包含 {url, path, size, ext, name}
+
+  /// 来源哈希，用于唯一标识文档来源
+  sourceHash  String          @map("source_hash")
   /// 创建时间
   createdAt   DateTime        @default(now()) @map("created_at")
   /// 更新时间
@@ -41,6 +44,7 @@ model Document {
 
   @@unique([userId, title])
   @@index([userId, updatedAt(sort: Desc)])
+  @@map("documents")
 }
 
 /// 文档分块，用于向量检索
@@ -63,4 +67,5 @@ model DocumentChunk {
   // @@index([embedding(ops: raw("halfvec_l2_ops"))], map: "documentchunk_embedding_idx")
 
   @@index([documentId])
+  @@map("document_chunks")
 }

@@ -14,5 +14,5 @@ export default defineConfig({
 	trailingComma: 'all', // 是否使用尾逗号
 	sortPackageJson: false, // 是否排序 package.json 文件
 	endOfLine: 'lf', // 换行符
-	ignorePatterns: ['node_modules', 'dist', 'logs', 'pnpm-lock.json'],
+	ignorePatterns: ['node_modules', 'dist', 'logs', 'pnpm-lock.json', 'src/generated/**'],
 } satisfies OxfmtConfig);

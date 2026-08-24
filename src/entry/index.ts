@@ -116,9 +116,8 @@ RAG 的基本流程：
 	const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
 
 	// 创建分块索引
-	//
-	// const createDocument = await documentService.upsertDocument(embeddingsModel, content);
-	// console.log(createDocument);
+	const createDocument = await documentService.upsertDocument(embeddingsModel, _content);
+	console.log(createDocument);
 
 	// 分块召回
 	const context = await documentService.retrieveContext(embeddingsModel, 'rag的流程是什么？', 5);

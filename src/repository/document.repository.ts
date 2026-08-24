@@ -1,3 +1,4 @@
+import { InputJsonValue } from '@prisma/client/runtime/client';
 import { Document, DocumentChunk, Prisma, PrismaClient } from '../generated/prisma/client';
 import { prisma } from '../prisma/client';
 
@@ -13,6 +14,36 @@ export enum FilterMethod {
 export class DocumentRepository {
 	// TODO 生产环境中使用新的连接 prisma 客户端实例
 	constructor(private readonly prisma: PrismaClient) {}
+
+	/**
+	 * 根据标题和用户ID获取文档信息
+	 * @param title 文档标题
+	 * @param userId 用户ID
+	 * @returns 文档信息
+	 */
+	async getDocumentByTitleAndUserId(title: string, userId: string) {
+		return await this.prisma.document.findUnique({
+			where: {
+				userId_title: {
+					userId: userId,
+					title: title,
+				},
+			},
+		});
+	}
+
+	/**
+	 * 根据文档ID获取文档分块数量
+	 * @param documentId 文档ID
+	 * @returns 文档分块数量
+	 */
+	async getDocumentChunksCountByDocumentId(documentId: number) {
+		return await this.prisma.documentChunk.count({
+			where: {
+				documentId,
+			},
+		});
+	}
 
 	/**
 	 *
@@ -34,21 +65,17 @@ export class DocumentRepository {
 				},
 				update: {
 					description: document.description,
-					fileType: document.fileType,
-					fileName: document.fileType,
-					fileSize: document.fileSize,
-					source: document.source,
-					sourceType: document.sourceType,
+					fileInfo: document.fileInfo as InputJsonValue,
+					chunkInfo: document.chunkInfo as InputJsonValue,
+					sourceHash: document.sourceHash,
 				},
 				create: {
 					userId: document.userId,
 					title: document.title,
 					description: document.description,
-					fileType: document.fileType,
-					fileName: document.fileType,
-					fileSize: document.fileSize,
-					source: document.source,
-					sourceType: document.sourceType,
+					fileInfo: document.fileInfo as InputJsonValue,
+					chunkInfo: document.chunkInfo as InputJsonValue,
+					sourceHash: document.sourceHash,
 				},
 			});
 			if (chunks.length === 0) {
@@ -68,7 +95,7 @@ export class DocumentRepository {
 			});
 
 			const chunkCount = await tx.$executeRaw`
-			INSERT INTO "DocumentChunk" ("document_id", "content", "embedding")
+			INSERT INTO "document_chunks" ("document_id", "content", "embedding")
 			VALUES ${Prisma.join(values)}
 		`;
 
@@ -82,17 +109,15 @@ export class DocumentRepository {
 		embedding: number[],
 		{ topK = 10, filter = FilterMethod.COSINE }: { topK: number; filter: FilterMethod },
 	) {
-		await this.prisma.$transaction(async (tx) => {
+		return await this.prisma.$transaction(async (tx) => {
 			const document = await tx.document.findUnique({
 				select: {
 					id: true,
 					title: true,
 					description: true,
-					fileType: true,
-					fileName: true,
-					fileSize: true,
-					source: true,
-					sourceType: true,
+					fileInfo: true,
+					chunkInfo: true,
+					sourceHash: true,
 					createdAt: true,
 				},
 				where: {
@@ -116,7 +141,7 @@ export class DocumentRepository {
 				`
 				SELECT 
 				content, 1 - (embedding <=> $2::halfvec) AS similarity
-				FROM "DocumentChunk"
+				FROM "document_chunks"
 				WHERE "document_id" = $1
 				ORDER BY embedding ${filter} $2::halfvec
 				LIMIT $3
