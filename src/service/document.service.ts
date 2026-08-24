@@ -1,4 +1,4 @@
-import documentRepository, { DocumentRepository } from '../repository/document.repository';
+import documentRepository, { DocumentRepository, FilterMethod } from '../repository/document.repository';
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { ChunkingStrategy } from '../utils/split/text-split';
 
@@ -34,6 +34,11 @@ export class DocumentService {
 			},
 			chunks,
 		);
+	}
+
+	async retrieveContext(embeddingModel: OpenAIEmbeddings<number[]>, query: string, topK: number) {
+		const embeddings = await embeddingModel.embedDocuments([query]);
+		return this.documentRepository.retrieveContext('RAG', 'xiaoming0000', embeddings[0], { topK, filter: FilterMethod.COSINE });
 	}
 }
 

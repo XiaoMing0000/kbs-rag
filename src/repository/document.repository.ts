@@ -1,7 +1,17 @@
 import { Document, DocumentChunk, Prisma, PrismaClient } from '../generated/prisma/client';
 import { prisma } from '../prisma/client';
 
+export enum FilterMethod {
+	INNER = '<#>', // 内积
+	COSINE = '<=>', // 余弦相似度
+	L1 = '<+>', // L1距离
+	L2 = '<->', // L2距离
+	HAMMING = '<~>', // 汉明距离
+	JAC_CARR = '<%>', // 杰卡德距离
+}
+
 export class DocumentRepository {
+	// TODO 生产环境中使用新的连接 prisma 客户端实例
 	constructor(private readonly prisma: PrismaClient) {}
 
 	/**
@@ -63,6 +73,59 @@ export class DocumentRepository {
 		`;
 
 			return { doc, chunkCount };
+		});
+	}
+
+	async retrieveContext(
+		documentTitle: string,
+		userId: string,
+		embedding: number[],
+		{ topK = 10, filter = FilterMethod.COSINE }: { topK: number; filter: FilterMethod },
+	) {
+		await this.prisma.$transaction(async (tx) => {
+			const document = await tx.document.findUnique({
+				select: {
+					id: true,
+					title: true,
+					description: true,
+					fileType: true,
+					fileName: true,
+					fileSize: true,
+					source: true,
+					sourceType: true,
+					createdAt: true,
+				},
+				where: {
+					userId_title: {
+						userId: userId,
+						title: documentTitle,
+					},
+				},
+			});
+			if (!document) {
+				return [];
+			}
+
+			const vector = `[${embedding.join(',')}]`;
+
+			if (!Object.values(FilterMethod).includes(filter)) {
+				throw new Error('Invalid filter method: ' + filter);
+			}
+
+			const chunks = await tx.$queryRawUnsafe<{ content: string; similarity: number }[]>(
+				`
+				SELECT 
+				content, 1 - (embedding <=> $2::halfvec) AS similarity
+				FROM "DocumentChunk"
+				WHERE "document_id" = $1
+				ORDER BY embedding ${filter} $2::halfvec
+				LIMIT $3
+			`,
+				document.id,
+				vector,
+				topK,
+			);
+			return chunks;
 		});
 	}
 }

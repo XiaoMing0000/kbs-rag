@@ -1,7 +1,7 @@
 import { Model } from '../utils/models';
 import documentService from '../service/document.service';
 
-const content = `# RAG
+const _content = `# RAG
 测试标签内的 content.
 ## 什么是 RAG
 Retrieval Augmented Generation 检索 增强 生成：
@@ -111,9 +111,16 @@ RAG 的基本流程：
 **运维闭环：**增量更新 -> 效果监控 -> 策略调整 -> 再监控
 `;
 
-// 使用 embedding 模型进行余弦相似度计算进行分块
-const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
 (async () => {
-	const createDocument = await documentService.upsertDocument(embeddingsModel, content);
-	console.log(createDocument);
+	// 使用 embedding 模型进行余弦相似度计算进行分块
+	const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
+
+	// 创建分块索引
+	//
+	// const createDocument = await documentService.upsertDocument(embeddingsModel, content);
+	// console.log(createDocument);
+
+	// 分块召回
+	const context = await documentService.retrieveContext(embeddingsModel, 'rag的流程是什么？', 5);
+	console.log(context);
 })();
