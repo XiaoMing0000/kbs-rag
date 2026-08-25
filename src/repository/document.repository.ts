@@ -2,6 +2,7 @@ import { InputJsonValue } from '@prisma/client/runtime/client';
 import { Document, DocumentChunk, Prisma, PrismaClient } from '../generated/prisma/client';
 import { prisma } from '../prisma/client';
 
+// 向量计算：https://github.com/pgvector/pgvector
 export enum FilterMethod {
 	INNER = '<#>', // 内积
 	COSINE = '<=>', // 余弦相似度
@@ -32,6 +33,25 @@ export class DocumentRepository {
 		});
 	}
 
+	/**
+	 * 查询用户有哪些知识库文档
+	 * @param userId 用户id
+	 * @returns
+	 */
+	async findDocuments(userId: string) {
+		return await this.prisma.document.findMany({
+			where: {
+				userId,
+			},
+			select: {
+				id: true,
+				title: true,
+				description: true,
+				fileInfo: true,
+				chunkInfo: true,
+			},
+		});
+	}
 	/**
 	 * 根据文档ID获取文档分块数量
 	 * @param documentId 文档ID
@@ -103,12 +123,21 @@ export class DocumentRepository {
 		});
 	}
 
-	async retrieveContext(
-		documentTitle: string,
-		userId: string,
-		embedding: number[],
-		{ topK = 10, filter = FilterMethod.COSINE }: { topK: number; filter: FilterMethod },
-	) {
+	async retrieveContext({
+		userId,
+		documentId,
+		embedding,
+		documentTitle,
+		topK = 10,
+		filter = FilterMethod.COSINE,
+	}: {
+		userId: string;
+		embedding: number[];
+		documentId?: number;
+		documentTitle?: string;
+		topK: number;
+		filter: FilterMethod;
+	}) {
 		return await this.prisma.$transaction(async (tx) => {
 			const document = await tx.document.findUnique({
 				select: {
@@ -120,12 +149,17 @@ export class DocumentRepository {
 					sourceHash: true,
 					createdAt: true,
 				},
-				where: {
-					userId_title: {
-						userId: userId,
-						title: documentTitle,
-					},
-				},
+				where: documentId
+					? {
+							id: documentId,
+							userId: userId,
+						}
+					: {
+							userId_title: {
+								userId: userId,
+								title: documentTitle ?? '',
+							},
+						},
 			});
 			if (!document) {
 				return [];

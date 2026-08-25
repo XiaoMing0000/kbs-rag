@@ -1,5 +1,4 @@
-import { Model } from '../utils/models';
-import documentService from '../service/document.service';
+import { testAgent } from '../agents/rag.agent';
 
 const _content = `# RAG
 测试标签内的 content.
@@ -112,14 +111,18 @@ RAG 的基本流程：
 `;
 
 (async () => {
-	// 使用 embedding 模型进行余弦相似度计算进行分块
-	const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
+	// // 使用 embedding 模型进行余弦相似度计算进行分块
+	// const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
 
-	// 创建分块索引
-	const createDocument = await documentService.upsertDocument(embeddingsModel, _content);
-	console.log(createDocument);
+	// // 创建分块索引
+	// const createDocument = await documentService.upsertDocument(embeddingsModel, _content);
+	// console.log(createDocument);
 
-	// 分块召回
-	const context = await documentService.retrieveContext(embeddingsModel, 'rag的流程是什么？', 5);
-	console.log(context);
+	// // 分块召回
+	// const embeddings = await embeddingsModel.embedDocuments(['rag的流程是什么？']);
+	// const topK = 5;
+	// const context = await documentService.retrieveContext(embeddings[0], topK);
+	// console.log(context);
+
+	await testAgent();
 })();

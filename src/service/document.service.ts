@@ -57,9 +57,14 @@ export class DocumentService {
 		);
 	}
 
-	async retrieveContext(embeddingModel: OpenAIEmbeddings<number[]>, query: string, topK: number) {
-		const embeddings = await embeddingModel.embedDocuments([query]);
-		return await this.documentRepository.retrieveContext('RAG', 'xiaoming0000', embeddings[0], { topK, filter: FilterMethod.COSINE });
+	async retrieveContext(embedding: number[], topK: number) {
+		return await this.documentRepository.retrieveContext({
+			userId: 'xiaoming0000',
+			embedding: embedding,
+			documentTitle: 'RAG',
+			topK,
+			filter: FilterMethod.COSINE,
+		});
 	}
 }
 
