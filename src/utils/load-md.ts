@@ -4,10 +4,10 @@ import path from 'path';
 const fileExt = '.md';
 
 type MdFile = {
-	path: string;
-	relativePath: string;
-	fileName: string;
-	content?: string;
+  path: string;
+  relativePath: string;
+  fileName: string;
+  content?: string;
 };
 
 /**
@@ -18,31 +18,31 @@ type MdFile = {
  * @returns Promise<MdFile[]>
  */
 export async function loadMdFiles(
-	dirPath: string,
-	baseDir: string = '',
-	options: { recursion?: boolean; content?: boolean } = { recursion: false, content: false },
+  dirPath: string,
+  baseDir: string = '',
+  options: { recursion?: boolean; content?: boolean } = { recursion: false, content: false },
 ): Promise<MdFile[]> {
-	baseDir = baseDir || dirPath;
+  baseDir = baseDir || dirPath;
 
-	const files: MdFile[] = [];
-	const dir = await fsp.readdir(dirPath);
-	dir.forEach(async (file) => {
-		const filePath = path.join(dirPath, file);
-		const isDirectory = (await fsp.stat(filePath)).isDirectory();
-		if (isDirectory) {
-			files.push(...(await loadMdFiles(filePath, baseDir, options)));
-		} else {
-			if (file.endsWith(fileExt)) {
-				files.push({
-					path: filePath,
-					relativePath: path.relative(baseDir, filePath),
-					fileName: file,
-					content: options.content ? await fsp.readFile(filePath, 'utf-8') : undefined,
-				});
-			}
-		}
-	});
-	return files;
+  const files: MdFile[] = [];
+  const dir = await fsp.readdir(dirPath);
+  dir.forEach(async (file) => {
+    const filePath = path.join(dirPath, file);
+    const isDirectory = (await fsp.stat(filePath)).isDirectory();
+    if (isDirectory) {
+      files.push(...(await loadMdFiles(filePath, baseDir, options)));
+    } else {
+      if (file.endsWith(fileExt)) {
+        files.push({
+          path: filePath,
+          relativePath: path.relative(baseDir, filePath),
+          fileName: file,
+          content: options.content ? await fsp.readFile(filePath, 'utf-8') : undefined,
+        });
+      }
+    }
+  });
+  return files;
 }
 
 /**
@@ -51,5 +51,5 @@ export async function loadMdFiles(
  * @returns Promise<string>
  */
 export async function loadMdContentAsync(filePath: string): Promise<string> {
-	return await fsp.readFile(filePath, 'utf-8');
+  return await fsp.readFile(filePath, 'utf-8');
 }

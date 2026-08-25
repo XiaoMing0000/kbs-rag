@@ -130,8 +130,8 @@ console.log(markdownSegments);
 // 语义分块
 const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
 (async () => {
-	const chunks = await semanticChunking(content, embeddingsModel, { chunkSize: 200, overlap: 0 });
-	chunks.forEach((chunk, i) => {
-		console.log(`\n===== chunk ${i + 1} / ${chunks.length}  (${chunk.length} chars) =====\n${chunk}`);
-	});
+  const chunks = await semanticChunking(content, embeddingsModel, { chunkSize: 200, overlap: 0 });
+  chunks.forEach((chunk, i) => {
+    console.log(`\n===== chunk ${i + 1} / ${chunks.length}  (${chunk.length} chars) =====\n${chunk}`);
+  });
 })();

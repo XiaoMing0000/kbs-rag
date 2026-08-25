@@ -1,0 +1,5 @@
+allowBuilds:
+  '@prisma/engines': false
+  esbuild: true
+  prisma: false
+  simple-git-hooks: true

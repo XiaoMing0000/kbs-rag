@@ -2,20 +2,20 @@ import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage, SystemMessage } from 'langchain';
 
 export enum SplitType {
-	RECURSIVE, // 递归分割
-	SPECIFIC, // 特定分割
-	SEMANTIC, // 语义分割
+  RECURSIVE, // 递归分割
+  SPECIFIC, // 特定分割
+  SEMANTIC, // 语义分割
 }
 
 export async function agenticSplit(
-	content: string,
-	model: ChatOpenAI,
-	{ chunkSize = 200, clean = true, splitType = SplitType.RECURSIVE }: { chunkSize?: number; clean?: boolean; splitType?: SplitType },
+  content: string,
+  model: ChatOpenAI,
+  { chunkSize = 200, clean = true, splitType = SplitType.RECURSIVE }: { chunkSize?: number; clean?: boolean; splitType?: SplitType },
 ): Promise<string[]> {
-	const systemPrompt = ((splitType: SplitType) => {
-		switch (splitType) {
-			case SplitType.RECURSIVE:
-				return `# 角色与目标
+  const systemPrompt = ((splitType: SplitType) => {
+    switch (splitType) {
+      case SplitType.RECURSIVE:
+        return `# 角色与目标
 你是一个递归文本分块专家。你的任务是将输入文本按层级从粗到细逐步分割，最终输出长度合规的文本块。
 
 # 处理规则（按优先级执行）
@@ -36,8 +36,8 @@ export async function agenticSplit(
 # 示例
 **输入**："递归分割是一种常用策略。它通过多层切分适应不同文本。当文本过长时，它会逐级细化，直至满足长度要求。"
 **输出**：["递归分割是一种常用策略。它通过多层切分适应不同文本。", "当文本过长时，它会逐级细化，直至满足长度要求。"]`;
-			case SplitType.SPECIFIC:
-				return `# 角色与目标
+      case SplitType.SPECIFIC:
+        return `# 角色与目标
 你是一个基于规则（Rule-based）的文本分块工具。你的任务是根据明确的标点和长度硬规则，将文本分割为合规的块。
 
 # 固定分割规则（严格按顺序执行）
@@ -56,8 +56,8 @@ export async function agenticSplit(
 # 示例
 **输入**："规则一：长度上限${chunkSize}。规则二：仅在句号处分割。规则三：超长句子强制在空格处截断。这是一个很长的测试句子用来验证强制截断逻辑。"
 **输出**：["规则一：长度上限${chunkSize}。规则二：仅在句号处分割。", "规则三：超长句子强制在空格处截断。", "这是一个很长的测试句子用来验证强制截断逻辑。"]`;
-			case SplitType.SEMANTIC:
-				return `# 角色与目标
+      case SplitType.SEMANTIC:
+        return `# 角色与目标
 你是一个语义理解型分块专家。你的任务是通过分析文本的主题、逻辑关系和语篇结构，将内容分割为语义自洽的独立块。
 
 # 核心原则（按重要性排序）
@@ -77,21 +77,21 @@ export async function agenticSplit(
 # 示例
 **输入**："深度学习在图像识别领域取得了巨大成功。它主要依赖于卷积神经网络。然而，这种模型需要大量标注数据。这在医疗影像场景中往往难以获得。"
 **输出**：["深度学习在图像识别领域取得了巨大成功。它主要依赖于卷积神经网络。", "然而，这种模型需要大量标注数据。这在医疗影像场景中往往难以获得。"]`;
-			default:
-				return `
+      default:
+        return `
         你是一个可以将文本拆分为多段的助手，请根据以下要求将文本拆分为多段：
         `;
-		}
-	})(splitType);
+    }
+  })(splitType);
 
-	const response = await model.invoke([new SystemMessage(systemPrompt), new HumanMessage(content)]);
-	if (typeof response.content === 'string') {
-		const content = JSON.parse(response.content) as string[];
-		return content;
-	} else if (response.content instanceof Array) {
-		const content = response.content.map((item) => item.text) as string[];
-		return content as string[];
-	} else {
-		return [];
-	}
+  const response = await model.invoke([new SystemMessage(systemPrompt), new HumanMessage(content)]);
+  if (typeof response.content === 'string') {
+    const content = JSON.parse(response.content) as string[];
+    return content;
+  } else if (response.content instanceof Array) {
+    const content = response.content.map((item) => item.text) as string[];
+    return content as string[];
+  } else {
+    return [];
+  }
 }
