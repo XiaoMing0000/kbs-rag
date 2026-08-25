@@ -14,6 +14,7 @@ const CONFIG = {
   QWEN_API_KEY: process.env.QWEN_API_KEY ?? '',
   QWEN_MODEL: process.env.QWEN_MODEL ?? '',
   QWEN_EMBEDDINGS_MODEL: process.env.QWEN_EMBEDDINGS_MODEL ?? '',
+  QWEN_RE_RANKER_MODEL: process.env.QWEN_RE_RANKER_MODEL ?? '',
 
   // postgres 配置
   DATABASE_URL: process.env.DATABASE_URL ?? '',

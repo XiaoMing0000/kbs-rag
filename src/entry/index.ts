@@ -113,16 +113,15 @@ RAG 的基本流程：
 (async () => {
   // // 使用 embedding 模型进行余弦相似度计算进行分块
   // const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
-
   // // 创建分块索引
   // const createDocument = await documentService.upsertDocument(embeddingsModel, _content);
   // console.log(createDocument);
-
   // // 分块召回
   // const embeddings = await embeddingsModel.embedDocuments(['rag的流程是什么？']);
   // const topK = 5;
   // const context = await documentService.retrieveContext(embeddings[0], topK);
   // console.log(context);
 
-  await testAgent('xiaoming0000', 'xiaoming0000');
+  const res = await testAgent('xiaoming0000', 'xiaoming0000');
+  console.log(res);
 })();

@@ -37,6 +37,7 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
     "@langchain/core": "^1.2.8",
     "@langchain/openai": "^1.5.8",
     "@prisma/adapter-pg": "^7.9.1",

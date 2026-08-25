@@ -1,10 +1,38 @@
+import path from 'path';
 import { DynamicStructuredTool, tool } from 'langchain';
 import z from 'zod';
 import documentRepository, { FilterMethod } from '../repository/document.repository';
 import { Model } from '../utils/models';
 import { ToolRunnableConfig } from '@langchain/core/tools';
+import { AutoModelForSequenceClassification, AutoTokenizer, env } from '@huggingface/transformers';
 
+// 嵌入模型
 const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
+
+// 重排序模型
+env.localModelPath = path.resolve('models') + path.sep;
+env.allowLocalModels = true;
+env.allowRemoteModels = false;
+const reRankerModel = await AutoModelForSequenceClassification.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
+const tokenizer = await AutoTokenizer.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
+
+async function resumeRanking(query: string, chunks: string[]) {
+  const features = tokenizer(
+    chunks.map(() => query),
+    {
+      text_pair: chunks,
+      padding: true,
+      truncation: true,
+    },
+  );
+
+  const { logits } = await reRankerModel(features);
+  const scores = Array.from(logits.data as Float32Array);
+  return chunks
+    .map((text, i) => ({ text, score: scores[i] }))
+    .sort((a, b) => b.score - a.score)
+    .map((item) => item.text);
+}
 
 /**
  * 查询拥有有哪些知识库文档
@@ -38,12 +66,19 @@ export const retrieveContextTool: DynamicStructuredTool = tool(
     const context = await documentRepository.retrieveContext({
       userId,
       embedding: embeddings[0],
-      topK: 5,
+      topK: 15, // 召回片段数量
       filter: FilterMethod.COSINE,
       documentId,
     });
-    // TODO chunk 召回后，需要对片段进行重排序，并返回给用户
-    return context.map((item) => item.content).join('\n');
+
+    // chunks 召回后，需要对片段进行重排序，并返回给用户
+    const rankedContexts = await resumeRanking(
+      query,
+      context.map((item) => item.content),
+    );
+
+    // 返回前 10 个重拍后的片段
+    return rankedContexts.slice(0, 10).join('\n');
   },
   {
     name: 'retrieveContext',
