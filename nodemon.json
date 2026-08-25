@@ -1,10 +1,10 @@
 {
-	"watch": ["src", ".env"],
-	"ext": "ts,js,json,env",
-	"exec": "tsx src/index.ts",
-	"verbose": true,
-	"ignore": [".git", "./doc", "./dist", "./logs", "./node_modules"],
-	"env": {
-		"NODE_ENV": "development"
-	}
+  "watch": ["src", ".env"],
+  "ext": "ts,js,json,env",
+  "exec": "tsx src/index.ts",
+  "verbose": true,
+  "ignore": [".git", "./doc", "./dist", "./logs", "./node_modules"],
+  "env": {
+    "NODE_ENV": "development"
+  }
 }

@@ -1,12 +1,11 @@
 {
-	"oxc.configPath": "oxlint.config.ts",
-	"oxc.fmt.configPath": "oxfmt.config.ts",
-	"oxc.typeAware": true,
-	"editor.defaultFormatter": "oxc.oxc-vscode",
-	"editor.formatOnSave": true,
-	"editor.formatOnSaveMode": "file", // oxfmt can only format whole files
-	"editor.codeActionsOnSave": {
-		"source.organizeImports": "never" // let oxfmt handle import organization
-	},
-	"cSpell.words": ["oxfmt", "oxlint", "xiaoming"]
+  "oxc.configPath": "oxlint.config.ts",
+  "oxc.fmt.configPath": "oxfmt.config.ts",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file", // oxfmt can only format whole files
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never" // let oxfmt handle import organization
+  },
+  "cSpell.words": ["esbuild", "oxfmt", "oxlint", "xiaoming"]
 }

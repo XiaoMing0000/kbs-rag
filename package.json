@@ -1,64 +1,64 @@
 {
-	"name": "nodejs-falsework",
-	"version": "1.0.0",
-	"description": "",
-	"type": "module",
-	"main": "index.js",
-	"license": "MIT",
-	"author": "xiaoming0000",
-	"scripts": {
-		"dev": "nodemon",
-		"dev:unwatch": "tsx src/index.ts",
-		"build": "node ./config/esbuild.config.mts",
-		"start": "node ./dist/index.js",
-		"tsc": "tsc",
-		"tsc:check": "tsc --noEmit",
-		"fmt": "oxfmt",
-		"fmt:check": "oxfmt --check",
-		"lint": "oxlint",
-		"lint:fix": "oxlint --fix",
-		"lint:check": "oxlint && pnpm run tsc:check",
-		"prepare": "simple-git-hooks"
-	},
-	"dependencies": {
-		"dotenv": "^17.2.3"
-	},
-	"devDependencies": {
-		"@types/node": "^25.9.3",
-		"esbuild": "^0.28.1",
-		"jiti": "^2.7.0",
-		"lint-staged": "^17.3.0",
-		"nodemon": "^3.1.14",
-		"oxfmt": "^0.64.0",
-		"oxlint": "^1.79.0",
-		"simple-git-hooks": "^2.13.1",
-		"ts-node": "^10.9.2",
-		"tsx": "^4.22.4",
-		"typescript": "^6.0.3"
-	},
-	"simple-git-hooks": {
-		"pre-commit": "pnpm exec lint-staged",
-		"commit-msg": "node scripts/check-changelog.js \"$1\"",
-		"pre-push": "pnpm run fmt:check && pnpm run lint:check"
-	},
-	"lint-staged": {
-		"*.{js,ts,jsx,tsx,json,jsonc}": [
-			"oxfmt",
-			"pnpm run lint:fix"
-		]
-	},
-	"engines": {
-		"node": ">=22.13.0",
-		"pnpm": ">=9.15.0"
-	},
-	"packageManager": "pnpm@9.15.0",
-	"keywords": [],
-	"homepage": "https://github.com/XiaoMing0000/nodejs-falseworkCode#readme",
-	"bugs": {
-		"url": "https://github.com/XiaoMing0000/nodejs-falsework/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/XiaoMing0000/nodejs-falsework.git"
-	}
+  "name": "nodejs-falsework",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "xiaoming0000",
+  "packageManager": "pnpm@11.23.0",
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=10.34.5"
+  },
+  "scripts": {
+    "dev": "nodemon",
+    "dev:unwatch": "tsx src/index.ts",
+    "build": "node ./config/esbuild.config.mts",
+    "start": "node ./dist/index.js",
+    "tsc": "tsc",
+    "tsc:check": "tsc --noEmit",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "lint:check": "oxlint && pnpm run tsc:check",
+    "prepare": "simple-git-hooks"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "esbuild": "^0.28.1",
+    "jiti": "^2.7.0",
+    "lint-staged": "^17.3.0",
+    "nodemon": "^3.1.14",
+    "oxfmt": "^0.64.0",
+    "oxlint": "^1.79.0",
+    "simple-git-hooks": "^2.13.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged",
+    "commit-msg": "node scripts/check-changelog.js \"$1\"",
+    "pre-push": "pnpm run fmt:check && pnpm run lint:check"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx,json,jsonc}": [
+      "oxfmt",
+      "pnpm run lint:fix"
+    ]
+  },
+  "keywords": [],
+  "homepage": "https://github.com/XiaoMing0000/nodejs-falseworkCode#readme",
+  "bugs": {
+    "url": "https://github.com/XiaoMing0000/nodejs-falsework/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XiaoMing0000/nodejs-falsework.git"
+  }
 }
