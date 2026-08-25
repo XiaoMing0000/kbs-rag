@@ -124,5 +124,5 @@ RAG 的基本流程：
   // const context = await documentService.retrieveContext(embeddings[0], topK);
   // console.log(context);
 
-  await testAgent();
+  await testAgent('xiaoming0000', 'xiaoming0000');
 })();
