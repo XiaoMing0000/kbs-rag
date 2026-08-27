@@ -34,15 +34,4 @@ export class Model {
       ...fields,
     });
   }
-
-  static qwenReRanker(fields?: Partial<OpenAIEmbeddingsParams>): OpenAIEmbeddings {
-    return new OpenAIEmbeddings({
-      model: CONFIG.QWEN_RE_RANKER_MODEL,
-      apiKey: CONFIG.QWEN_API_KEY,
-      configuration: {
-        baseURL: CONFIG.QWEN_BASE_URL,
-      },
-      ...fields,
-    });
-  }
 }

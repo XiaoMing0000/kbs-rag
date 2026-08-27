@@ -7,5 +7,5 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never" // let oxfmt handle import organization
   },
-  "cSpell.words": ["esbuild", "oxfmt", "oxlint", "xiaoming", "agentic", "deepseek", "langchain", "LANGSMITH", "qwen"]
+  "cSpell.words": ["agentic", "deepseek", "esbuild", "langchain", "LANGSMITH", "ollama", "oxfmt", "oxlint", "qwen", "rerank", "xiaoming"]
 }

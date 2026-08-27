@@ -16,6 +16,12 @@ env.allowRemoteModels = false;
 const reRankerModel = await AutoModelForSequenceClassification.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
 const tokenizer = await AutoTokenizer.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
 
+/**
+ * 重排序片段
+ * @param query 用户查询内容
+ * @param chunks 召回片段
+ * @returns 重排序后的片段
+ */
 async function resumeRanking(query: string, chunks: string[]) {
   const features = tokenizer(
     chunks.map(() => query),
@@ -66,7 +72,7 @@ export const retrieveContextTool: DynamicStructuredTool = tool(
     const context = await documentRepository.retrieveContext({
       userId,
       embedding: embeddings[0],
-      topK: 15, // 召回片段数量
+      topK: 20, // 召回片段数量
       filter: FilterMethod.COSINE,
       documentId,
     });

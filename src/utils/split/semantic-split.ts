@@ -12,6 +12,7 @@
 
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { ChunkingStrategy, ChunkingStrategyOptions, cleanText } from './text-split';
+import { cosineSimilarity } from '../utils';
 
 type SemanticChunkingOptions = ChunkingStrategyOptions & {
   /** 相邻句余弦距离超过该百分位则视为主题切换并切分，默认 95 */
@@ -22,22 +23,6 @@ type SemanticChunkingOptions = ChunkingStrategyOptions & {
 
 /** 中文句末标点、英文 !?，以及换行。不把 `.` 当切点，避免把 `1.` 编号列表切断 */
 const SENTENCE_SPLIT_REGEXP = /(?<=[。！？；>!?])\s*|(?:\n+)/;
-
-function cosineSimilarity(a: number[], b: number[]): number {
-  let dot = 0;
-  let normA = 0;
-  let normB = 0;
-  const len = Math.min(a.length, b.length);
-  for (let i = 0; i < len; i++) {
-    const x = a[i] ?? 0;
-    const y = b[i] ?? 0;
-    dot += x * y;
-    normA += x * x;
-    normB += y * y;
-  }
-  const denom = Math.sqrt(normA) * Math.sqrt(normB);
-  return denom === 0 ? 0 : dot / denom;
-}
 
 /** 线性插值百分位，与 numpy.percentile(interpolation='linear') 一致 */
 function percentile(values: number[], p: number): number {
