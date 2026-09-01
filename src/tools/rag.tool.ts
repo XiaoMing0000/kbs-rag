@@ -13,8 +13,6 @@ const embeddingsModel = Model.qwenEmbeddings({ batchSize: 8 });
 env.localModelPath = path.resolve('models') + path.sep;
 env.allowLocalModels = true;
 env.allowRemoteModels = false;
-const reRankerModel = await AutoModelForSequenceClassification.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
-const tokenizer = await AutoTokenizer.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
 
 /**
  * 重排序片段
@@ -23,6 +21,8 @@ const tokenizer = await AutoTokenizer.from_pretrained('Xenova/ms-marco-TinyBERT-
  * @returns 重排序后的片段
  */
 async function resumeRanking(query: string, chunks: string[]) {
+  const reRankerModel = await AutoModelForSequenceClassification.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
+  const tokenizer = await AutoTokenizer.from_pretrained('Xenova/ms-marco-TinyBERT-L-2-v2');
   const features = tokenizer(
     chunks.map(() => query),
     {
